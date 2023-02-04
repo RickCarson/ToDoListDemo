@@ -1,6 +1,3 @@
-using ToDoListDemo.Models;
-using ToDoListDemo.Services;
-
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -28,9 +25,12 @@ static void ConfigureServices(IServiceCollection services)
     services.AddSwaggerGen();
     services.AddDbContext<ToDoContext>(opt =>
         opt.UseInMemoryDatabase("ToDo"));
+
     services.AddTransient<ToDoRepository>();
     services.AddTransient<ToDoGroupRepository>();
+
     services.AddTransient<ToDoService>();
+    services.AddTransient<ToDoGroupService>();
 
 
 }
