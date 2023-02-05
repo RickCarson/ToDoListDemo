@@ -43,8 +43,14 @@ public class ToDoController : ControllerBase
 
     // POST api/<ToDoController>
     [HttpPost]
-    public void Post([FromBody] string value)
+    public async Task<IActionResult> Post([FromBody] ToDo newToDo)
     {
+        var result = await _toDoService.AddToDo(newToDo);
+
+        if (result is null)
+            return StatusCode(500);
+
+        return Ok(result);
     }
 
     // PUT api/<ToDoController>/5

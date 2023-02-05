@@ -1,5 +1,7 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Diagnostics.Metrics;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using ToDoListDemo.Models;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -97,6 +99,9 @@ public class ToDoListTests : BaseTest
         Assert.AreEqual(4, pendingDoTos.Count(), "Correct number of pending ToDos returned by Group Name");
     }
 
+    // User Story 1
+    //1 - b.Two main tasks groups: pending and completed tasks.
+    //i.Depending on the type (completed vs pending) the task will be displayed on a different group.
     [Test]
     public async Task All_Complete_ToDos_Are_Returned()
     {
@@ -124,6 +129,26 @@ public class ToDoListTests : BaseTest
             .Name.Equals("Procrastinating"));
     }
 
+    //User story 2
+    //2. The user should be able to add this previous description to his or her to-do list
+    [Test]
+    public async Task When_A_New_ToDo_Is_Added_It_Is_Saved_To_The_List_Of_ToDo()
+    {
+        var numberOfToDos = _toDoService.GetAll().Count();
+        await _toDoService.AddToDo(new ToDo { Details = "Complete user story 2" });
 
-    //2. Initially, this list will be empty.
+        Assert.AreEqual(numberOfToDos + 1, _toDoService.GetAll().Count(), "Number of ToDos has increased by 1");
+    }
+
+    //User story 2
+    //3. The added to-do will be displayed as a pending task
+    [Test]
+    public async Task When_A_New_ToDo_Is_Added_It_Defaults_To_Pending()
+    {
+        var addedToDo = await _toDoService.AddToDo(new ToDo { Details = "Complete user story 2" });
+
+        var toDoGroupPending = _toDoGroupService.GetGroup("Pending");
+
+        Assert.AreEqual(toDoGroupPending, addedToDo.ToDoGroup, "Newly added ToDo has defaulted to pending");
+    }
 }

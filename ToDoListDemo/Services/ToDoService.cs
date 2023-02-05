@@ -6,18 +6,15 @@ public class ToDoService
 {
     private readonly ILogger _logger;
     private readonly ToDoRepository _toDoRepository;
-    private readonly ToDoGroupRepository _toDoGroupRepository;
     private readonly ToDoGroupService _toDoGroupService;
 
     public ToDoService(ILogger<ToDoService> logger,
         ToDoRepository toDoRepository,
-        ToDoGroupService toDoGroupService,
-        ToDoGroupRepository toDoGroupRepository)
+        ToDoGroupService toDoGroupService)
     {
         _logger = logger;
         _toDoRepository = toDoRepository;
         _toDoGroupService = toDoGroupService;
-        _toDoGroupRepository = toDoGroupRepository;
     }
 
     public IEnumerable<ToDo> GetAll()
@@ -105,5 +102,27 @@ public class ToDoService
         }
     }
 
+    public async Task<ToDo> AddToDo(ToDo newToDo)
+    {
+        _logger.LogInformation("Adding new ToDo {@newToDo}", newToDo);
+        try
+        {
+            if (newToDo.ToDoGroup is null)
+            {
+                _logger.LogInformation("Defaulting to pending");
+                var toDoGroupPending = _toDoGroupService.GetGroup("Pending");
+                newToDo.ToDoGroup = toDoGroupPending;
+            }
 
+            await _toDoRepository.Add(newToDo);
+            await _toDoRepository.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return null;
+        }
+
+        return newToDo;
+    }
 }
