@@ -1,4 +1,6 @@
-﻿namespace ToDoListDemo.Services;
+﻿using ToDoListDemo.Data;
+
+namespace ToDoListDemo.Services;
 
 public class ToDoService
 {
@@ -6,7 +8,7 @@ public class ToDoService
     private readonly ToDoRepository _toDoRepository;
     private readonly ToDoGroupService _toDoGroupService;
 
-    public ToDoService(ILogger<ToDoService> logger, 
+    public ToDoService(ILogger<ToDoService> logger,
         ToDoRepository toDoRepository,
         ToDoGroupService toDoGroupService)
     {
@@ -43,7 +45,7 @@ public class ToDoService
         }
     }
 
-    public IEnumerable<ToDo> GetByGroup(int groupId) 
+    public IEnumerable<ToDo> GetByGroup(int groupId)
     {
         _logger.LogInformation($"Getting todos by group id {groupId}");
         try

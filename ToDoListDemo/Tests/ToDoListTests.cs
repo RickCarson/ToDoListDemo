@@ -46,6 +46,9 @@ public class ToDoListTests : BaseTest
     {
         _toDoRepository.DeleteAll();
         await _toDoRepository.SaveChanges();
+
+        _toDoGroupRepository.DeleteAll();
+        await _toDoGroupRepository.SaveChanges();
     }
 
     [Test]
@@ -107,6 +110,7 @@ public class ToDoListTests : BaseTest
 
         Assert.AreEqual(1, completeDoTos.Count(), "Correct number of pending ToDos returned by Group Name");
     }
+
 
     //2. Initially, this list will be empty.
 }
