@@ -6,15 +6,18 @@ public class ToDoService
 {
     private readonly ILogger _logger;
     private readonly ToDoRepository _toDoRepository;
+    private readonly ToDoGroupRepository _toDoGroupRepository;
     private readonly ToDoGroupService _toDoGroupService;
 
     public ToDoService(ILogger<ToDoService> logger,
         ToDoRepository toDoRepository,
-        ToDoGroupService toDoGroupService)
+        ToDoGroupService toDoGroupService,
+        ToDoGroupRepository toDoGroupRepository)
     {
         _logger = logger;
         _toDoRepository = toDoRepository;
         _toDoGroupService = toDoGroupService;
+        _toDoGroupRepository = toDoGroupRepository;
     }
 
     public IEnumerable<ToDo> GetAll()

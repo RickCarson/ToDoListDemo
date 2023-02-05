@@ -57,4 +57,21 @@ public class ToDoGroupService
             return null!;
         }
     }
+
+    public async Task<ToDoGroup> AddToDoGroup(ToDoGroup newToDoGroup)
+    {
+        _logger.LogInformation("Adding new ToDo Group {@newToDoGroup}", newToDoGroup);
+        try
+        {
+            await _toDoGroupRepository.Add(newToDoGroup);
+            await _toDoGroupRepository.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return null;
+        }
+
+        return newToDoGroup;
+    }
 }

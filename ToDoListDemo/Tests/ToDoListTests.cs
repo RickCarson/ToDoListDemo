@@ -111,6 +111,19 @@ public class ToDoListTests : BaseTest
         Assert.AreEqual(1, completeDoTos.Count(), "Correct number of pending ToDos returned by Group Name");
     }
 
+    [Test]
+    public async Task When_New_ToDo_Group_Is_Added_It_Can_Be_Retrived()
+    {
+        var addedToDoGroup = await _toDoGroupService.AddToDoGroup(new ToDoGroup { Name = "Procrastinating" });
+
+
+        Assert.IsNotNull(addedToDoGroup, "Value returned when adding new ToDo Group");
+        Assert.AreEqual(3, _toDoGroupService.GetAll().Count(), "Number of ToDo groups correct");
+        Assert.IsTrue(_toDoGroupService.GetAll()
+            .FirstOrDefault(g => g.Id == addedToDoGroup.Id)
+            .Name.Equals("Procrastinating"));
+    }
+
 
     //2. Initially, this list will be empty.
 }
