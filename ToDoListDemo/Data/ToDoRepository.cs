@@ -6,4 +6,10 @@ public class ToDoRepository : BaseRepository<ToDo>
     {
         db = toDoContext;
     }
+
+    public override List<ToDo> GetAll()
+    {
+        return db.ToDos.Include(a => a.ToDoGroup)
+            .ToList();
+    }
 }

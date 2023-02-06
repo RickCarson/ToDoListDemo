@@ -151,4 +151,32 @@ public class ToDoListTests : BaseTest
 
         Assert.AreEqual(toDoGroupPending, addedToDo.ToDoGroup, "Newly added ToDo has defaulted to pending");
     }
+
+    //User story 2
+    //1. The user should be able to pick a task and change its status:
+
+    //If the task is pending it will become completed
+    [Test]
+    public async Task When_ToDo_Is_Pending_It_Is_Updated_To_Complete()
+    {
+        var completeGroup = _toDoGroupService.GetGroup("Complete");
+        var toDoToUpdate = _toDoService.GetByGroup("Pending").FirstOrDefault();
+        toDoToUpdate.ToDoGroup = completeGroup;
+        _toDoService.UpdateToDo(toDoToUpdate);
+
+        Assert.AreEqual(completeGroup, toDoToUpdate.ToDoGroup);
+    }
+
+    //If the task is completed it will become pending
+    [Test]
+    public async Task When_ToDo_Is_Complete_It_Is_Updated_To_Pending()
+    {
+        var pendingGroup = _toDoGroupService.GetGroup("Pending");
+        var toDoToUpdate = _toDoService.GetByGroup("Complete").FirstOrDefault();
+        toDoToUpdate.ToDoGroup = pendingGroup;
+        _toDoService.UpdateToDo(toDoToUpdate);
+
+        Assert.AreEqual(pendingGroup, toDoToUpdate.ToDoGroup);
+    }
+
 }

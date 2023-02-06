@@ -53,7 +53,7 @@ public class ToDoService
             var toDoGroup = _toDoGroupService.GetGroup(groupId);
 
             if (toDoGroup is null)
-                return null!;
+                return new List<ToDo>();
 
             return GetByGroup(toDoGroup);
         }
@@ -72,7 +72,7 @@ public class ToDoService
             var toDoGroup = _toDoGroupService.GetGroup(groupName);
 
             if (toDoGroup is null)
-                return null!;
+                return new List<ToDo>();
 
             return GetByGroup(toDoGroup);
         }
@@ -91,7 +91,7 @@ public class ToDoService
             var toDosByGroup = _toDoRepository.GetAll().Where(t => t.ToDoGroup == toDoGroup);
 
             if (toDosByGroup is null)
-                return null!;
+                return new List<ToDo>();
 
             return toDosByGroup;
         }
@@ -124,5 +124,28 @@ public class ToDoService
         }
 
         return newToDo;
+    }
+
+    public async Task<ToDo> UpdateToDo(ToDo toDoToUpdate)
+    {
+        _logger.LogInformation("Updating ToDo {@toDoToUpdate}", toDoToUpdate);
+        try
+        {
+            _toDoRepository.Edit(toDoToUpdate);
+            await _toDoRepository.SaveChanges();
+
+            // Check updataed
+            var updatedToDo = GetAll().FirstOrDefault(t => t.Id == toDoToUpdate.Id);
+
+            if (updatedToDo is null)
+                return new ToDo();
+
+            return updatedToDo;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return null!;
+        }
     }
 }
